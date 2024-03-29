@@ -7,8 +7,7 @@
 # Features
 * Passwords not stored
 * Minimal, easy to use CLI
-* Extremely secure, even if someone cracks the encryption on the files, they don't have your passwords
-  * (unless they got the password, and you reused it as the master password. you're fucked in that case lol)
+* Extremely secure, even if someone cracks the encryption on the files, they don't really have your passwords
 ## KNOWN FLAWS
 * Entry and category names aren't obscured, but it's really a nothingburger even if your PC gets compromised. You got more things to worry about then than the attacker knowing what kind of freaky midget porno sites you have accounts on.
 # Usage

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-VERSION='1.0.0_00'
+VERSION='1.0.0_01'
 export GPG_TTY="$(tty)"
 dprint(){
   printf "\e[90m[\e[32mdpmgr\e[90m] \e[0m$1"
@@ -72,7 +72,9 @@ esac
 #now entries
 [ ! -f $2 ]&&throwerr "Entry doesn't exist or is a category." 
 case "$1" in
-  "v")   dpass $(gpg -d $2 2>/dev/null|head -n1);;
+  "v")
+    dprint "Master password:"; read -s DeepDarkMaster;echo
+    echo "$DeepDarkMaster"|dpass $(gpg --passphrase "$DeepDarkMaster" -d $2 2>/dev/null|head -n1)|tail -n2;;
   "nts") gpg -d $2 2>/dev/null|tail -n+2;;
   "ed")
     FILENAME=$(mktemp)
