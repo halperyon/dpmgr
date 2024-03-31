@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-VERSION='1.0.0_01'
-export GPG_TTY="$(tty)"
+VERSION='1.0.1_00'
+export GPG_TTY="$(tty)" #without this gpg dialog doesn't show up
 dprint(){
   printf "\e[90m[\e[32mdpmgr\e[90m] \e[0m$1"
 }
@@ -69,17 +69,19 @@ case "$1" in
   "mk")      mk $2;exit;;
   "bakhmut") rm -ri "$2";exit;;
 esac
-#now entries
 [ ! -f $2 ]&&throwerr "Entry doesn't exist or is a category." 
+#now entries
 case "$1" in
   "v")
     dprint "Master password:"; read -s DeepDarkMaster;echo
-    echo "$DeepDarkMaster"|dpass $(gpg --passphrase "$DeepDarkMaster" -d $2 2>/dev/null|head -n1)|tail -n2;;
+    echo "$DeepDarkMaster"|dpass $(gpg --batch --passphrase "$DeepDarkMaster" -d $2 2>/dev/null|head -n1)|tail -n2;;
   "nts") gpg -d $2 2>/dev/null|tail -n+2;;
   "ed")
     FILENAME=$(mktemp)
     gpg -d $2 2>/dev/null > "$FILENAME"
     ${EDITOR} "$FILENAME"
-    gpg -o "$2" -c "$FILENAME";;
+    gpg --yes -o "$2" -c "$FILENAME"
+    head -n1 /dev/urandom > $FILENAME #prevent recovery
+    rm "$FILENAME";;
   "rm")  rm -i "$2";;
 esac
